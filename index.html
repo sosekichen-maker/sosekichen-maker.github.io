@@ -17,6 +17,16 @@
   <meta property="og:image:alt" content="Siyu Chen">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .review-note { display: flex; align-items: center; gap: .5rem; margin: .5rem 0 1.25rem; color: var(--muted); font-size: .8125rem; }
+    .review-gift { flex: 0 0 26px; width: 26px; height: 30px; color: var(--accent); overflow: visible; }
+    .review-gift g { transform-origin: center bottom; }
+    .review-gift.is-visible g { animation: gift-hop 1.5s ease-in-out 3; }
+    .review-note time { white-space: nowrap; }
+    @keyframes gift-hop { 0%, 55%, 100% { transform: translateY(0); } 20% { transform: translateY(-5px) rotate(-5deg); } 35% { transform: translateY(0) rotate(3deg); } 45% { transform: translateY(-2px); } }
+    @media (prefers-reduced-motion: reduce) { .review-gift.is-visible g { animation: none; } }
+    @media print { .review-gift.is-visible g { animation: none; } }
+  </style>
   <script src="data/site.js" defer></script>
   <script src="data/publications.js" defer></script>
   <script src="js/main.js" defer></script>
@@ -68,6 +78,13 @@
       <h2 id="publications-heading">Publications, presentations &amp; posters</h2>
       <div id="publication-filters" class="filters" role="group" aria-label="Filter journal publications, presentations and posters" hidden></div>
       <p id="publication-count" class="result-count" role="status" aria-live="polite" aria-atomic="true"></p>
+      <!-- Update the manuscript count and this status date together; this is not a publication record. -->
+      <p class="review-note">
+        <svg class="review-gift" viewBox="0 0 28 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+          <g><path d="M5 16h18v13H5z" fill="#f2f6f8"/><path d="M3 11h22v5H3z" fill="#f2f6f8"/><path d="M14 11v18M14 11C5 11 5 3 9 4c3 0 5 7 5 7Zm0 0c9 0 9-8 5-7-3 0-5 7-5 7Z"/></g>
+        </svg>
+        <span>1 journal manuscript under review <span aria-hidden="true">·</span> As of <time datetime="2026-10-02">October 2, 2026</time></span>
+      </p>
       <noscript><p>Enable JavaScript to view the complete publication list, or consult the linked CV and Google Scholar profile.</p></noscript>
       <section id="all-publications" class="publication-group" aria-labelledby="journal-publications-heading">
         <h3 id="journal-publications-heading">Journal publications</h3>
@@ -111,5 +128,15 @@
     <span>Last updated <time id="last-updated" datetime="2026-09-29">September 2026</time></span>
     <a href="#home">Back to top <span aria-hidden="true">↑</span></a>
   </footer>
+  <script>
+    // Play a brief greeting when the status enters view, without continuous distraction.
+    const reviewGift = document.querySelector('.review-gift');
+    if (reviewGift && 'IntersectionObserver' in window) {
+      const reviewObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => reviewGift.classList.toggle('is-visible', entry.isIntersecting));
+      });
+      reviewObserver.observe(reviewGift);
+    }
+  </script>
 </body>
 </html>
